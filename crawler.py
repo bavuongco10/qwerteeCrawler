@@ -8,9 +8,18 @@ Created on Sun Jul 17 01:15:45 2016
 import workerpool
 import requests
 import os
+import sys
+
 urls = []
 #example
 uri = "https://www.qwertee.com/images/designs/png/88589.png"
+
+def isInt(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 def getUri(id):
     urlHead = "https://cdn.qwertee.com/images/designs/png/"
@@ -44,7 +53,16 @@ directory = 'image'
 if not os.path.exists(directory):
     os.makedirs(directory)
 os.chdir(directory)
-download_links = [i for i in range(80000,81000)]
+params = sys.argv
+if len(params)<3:
+    print 'Please follow example:'
+    print 'python crawler.py 1 10000'
+if not isInt(params[1]) or not isInt(params[2]):
+    print 'Incorect Input'
+
+floor = int(params[1])
+ceil = int(params[2])
+download_links = [i for i in range(floor,ceil)]
 print("Initialize a pool...")
 pool(download_links)
 print("end job...")
