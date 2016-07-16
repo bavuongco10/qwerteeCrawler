@@ -7,6 +7,7 @@ Created on Sun Jul 17 01:15:45 2016
 
 import workerpool
 import requests
+import os
 urls = []
 #example
 uri = "https://www.qwertee.com/images/designs/png/88589.png"
@@ -20,10 +21,11 @@ def job(id):
     uri = getUri(id)
     res = requests.head(uri)
     if res.ok:
-        urls.append(id)
+        #urls.appen(id)
         r = requests.get(uri)
         with open(str(id)+".png", "wb") as code:
             code.write(r.content)
+        print 'downloaded: ',id
         
 
 def pool(download_links):
@@ -38,7 +40,10 @@ def pool(download_links):
     pool.wait()
 
 
-    
+directory = 'image'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+os.chdir(directory)
 download_links = [i for i in range(80000,81000)]
 print("Initialize a pool...")
 pool(download_links)
